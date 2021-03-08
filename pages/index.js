@@ -1,65 +1,80 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import ImageList from "@material-ui/core/ImageList";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import useColumnQuery from "../hooks/useColumnQuery";
+import Image from "../components/Image";
+import Loading from "../components/Loading";
 
 export default function Home() {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const columns = useColumnQuery();
+
+  console.log("render");
+
+  useEffect(() => {
+    setLoading(true);
+
+    const maxPages = 10;
+
+    const getImagesByPage = (page) => {
+      return axios
+        .get(`https://picsum.photos/v2/list?page=${page}&limit=100`)
+        .then(({ data }) => data);
+    };
+
+    const pageRequests = [...new Array(maxPages)].map((item, index) => {
+      const page = index + 1;
+      return getImagesByPage(page);
+    });
+
+    const addScaledImageURLs = (data) => {
+      return data.map(({ id, height, width, ...rest }) => {
+        const scaledWidth = 400;
+        const quotient = height / width;
+        const scaledHeight = Math.round(quotient * scaledWidth);
+        const scaled_url = `https://picsum.photos/id/${id}/${scaledWidth}/${scaledHeight}`;
+        return { ...rest, scaled_url, scaledWidth, scaledHeight };
+      });
+    };
+
+    Promise.all(pageRequests)
+      .then((pages) => {
+        const concatedPagesData = pages.reduce(
+          (acc, curr) => [...acc, ...curr],
+          []
+        );
+        const withScaledImageURLs = addScaledImageURLs(concatedPagesData);
+        setImages(withScaledImageURLs);
+        setLoading(false);
+        console.log(concatedPagesData.length);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-    <div className={styles.container}>
+    <div>
+      <CssBaseline />
       <Head>
-        <title>Create Next App</title>
+        <title>1000 Images</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      <ImageList variant="masonry" cols={columns} gap={8}>
+        {images.map((item, i) => (
+          <Image key={item.download_url} item={item} />
+        ))}
+      </ImageList>
     </div>
-  )
+  );
 }
