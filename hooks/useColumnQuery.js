@@ -1,4 +1,5 @@
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useEffect } from "react";
 
 export default function useColumnQuery() {
   const showTwoCol = useMediaQuery("(min-width:300px) and (max-width:600px)");
@@ -19,7 +20,11 @@ export default function useColumnQuery() {
     return 1;
   };
   
+  useEffect(() => {
+    window.scrollBy(0, 1);
+    window.scrollBy(0, -1);
+  }, [showTwoCol, showThreeCol, showFiveCol]);
+
   const columns = getColumns();
-  
   return columns;
 }

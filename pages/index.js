@@ -6,13 +6,12 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import useColumnQuery from "../hooks/useColumnQuery";
 import Image from "../components/Image";
 import Loading from "../components/Loading";
+import shuffle from "../utils/shuffle"
 
 export default function Home() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const columns = useColumnQuery();
-
-  console.log("render");
 
   useEffect(() => {
     setLoading(true);
@@ -47,9 +46,8 @@ export default function Home() {
           []
         );
         const withScaledImageURLs = addScaledImageURLs(concatedPagesData);
-        setImages(withScaledImageURLs);
+        setImages(shuffle(withScaledImageURLs));
         setLoading(false);
-        console.log(concatedPagesData.length);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -71,8 +69,8 @@ export default function Home() {
       </Head>
 
       <ImageList variant="masonry" cols={columns} gap={8}>
-        {images.map((item, i) => (
-          <Image key={item.download_url} item={item} />
+        {images.map((item) => (
+          <Image key={item.download_url} item={item}/>
         ))}
       </ImageList>
     </div>

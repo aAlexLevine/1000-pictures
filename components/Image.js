@@ -20,6 +20,7 @@ export default function Image({
       className={styles.responsiveContainer}
       sx={{ paddingBottom: aspectRatio }}
       height={scaledHeight}
+      data-testid="image-wrapper"
     >
       <Skeleton
         className={`${styles.image} ${isLoaded ? styles.hide : null}`}

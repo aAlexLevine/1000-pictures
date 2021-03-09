@@ -13,10 +13,11 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+window.scrollBy = jest.fn();
+
 describe("Home", () => {
   it("renders Home component", async () => {
     setup();
-    expect(axios.get).toHaveBeenCalledTimes(10);
     await waitForElementToBeRemoved(() =>
       screen.getByText("Loading 1000 Pictures...")
     );
@@ -46,29 +47,11 @@ describe("Home", () => {
     expect(axios.get).toHaveBeenCalledTimes(10);
   });
 
-  it("adds additional scaled properties to data", async () => {
-    //check for scaled_url, scaled width etc
+  it("renders dynamic image wrapper", async () => {
+    setup();
+    await waitForElementToBeRemoved(() =>
+      screen.getByText("Loading 1000 Pictures...")
+    );
+    expect(screen.getAllByTestId("image-wrapper"))
   });
-
-  it("does not crop images after resize", async () => {
-    //check calculation equals width height
-  })
-
-  it("displays fetched images", async () => {
-    //check alt tags
-    // pagesData.forEach((page)=> {
-    //   expect('alt tag' === page.download_url)
-    // })
-  });
-
-
 });
-
-
-//describe image
-//link should be present
-// expect(screen.getByRole("link")).toHaveAttribute(
-//   "href",
-//   "https://www.test.com"
-// );
-

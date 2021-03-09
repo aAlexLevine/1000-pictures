@@ -1,8 +1,29 @@
+# 1000 pictures
+
+Image gallery for viewing 1000 high resolution photographs in a performant, stylish and mobile friendly application.
+
+Images are from the [Lorem Picsum API](https://picsum.photos/)
+CSS Framework [Material UI](https://next.material-ui.com/)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+#### Testing
+
+Unit testing is managed by Jest and React Testing Library
+
+Testing for this application is motivated not by implementation details but how a user actually engages with the DOM.
+
+See [this article](https://kentcdodds.com/blog/introducing-the-react-testing-library) by Kent C. Dodds for a good primer on the library and the thought process behind it.
 
 ## Getting Started
 
-First, run the development server:
+First,
+
+```bash
+npm install
+```
+
+then run the development server:
 
 ```bash
 npm run dev
