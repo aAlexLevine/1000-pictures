@@ -20,11 +20,6 @@ export default function useColumnQuery() {
     return 1;
   };
   
-  useEffect(() => {
-    window.scrollBy(0, 1);
-    window.scrollBy(0, -1);
-  }, [showTwoCol, showThreeCol, showFiveCol]);
-
   const columns = getColumns();
   return columns;
 }

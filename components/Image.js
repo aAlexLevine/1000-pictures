@@ -26,6 +26,7 @@ export default function Image({
         className={`${styles.image} ${isLoaded ? styles.hide : null}`}
       />
       <LazyLoad
+        resize={true}
         offset={600}
         height={scaledHeight}
         placeholder={<div className={styles.image}></div>}

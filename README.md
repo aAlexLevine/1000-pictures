@@ -15,6 +15,10 @@ Testing for this application is motivated not by implementation details but how 
 
 See [this article](https://kentcdodds.com/blog/introducing-the-react-testing-library) by Kent C. Dodds for a good primer on the library and the thought process behind it.
 
+```bash
+npm test
+```
+
 ## Getting Started
 
 First,

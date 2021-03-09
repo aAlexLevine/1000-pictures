@@ -13,8 +13,6 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-window.scrollBy = jest.fn();
-
 describe("Home", () => {
   it("renders Home component", async () => {
     setup();
