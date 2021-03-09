@@ -1,5 +1,4 @@
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { useEffect } from "react";
 
 export default function useColumnQuery() {
   const showTwoCol = useMediaQuery("(min-width:300px) and (max-width:600px)");
